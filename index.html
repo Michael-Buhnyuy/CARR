@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editable Credit Application Form</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      width: 1000px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border: 1px solid #000;
+    }
+
+    .top-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr 320px;
+      gap: 10px;
+      padding-left: 50px;
+      align-items: start;
+      margin-bottom: 10px;
+    }
+
+    .logo-box h1 {
+      margin: 0;
+      font-size: 40px;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    .logo-box p {
+      margin: 0;
+      font-size: 18px;
+      text-align: left;
+    }
+
+
+
+    .title-box {
+      text-align: center;
+    }
+
+    .title-box h2 {
+      margin: 0;
+      font-size: 38px;
+      font-weight: bold;
+    }
+
+    .title-box p {
+      margin-top: 8px;
+      font-weight: bold;
+    }
+
+    .info-box {
+      border: 1px solid #000;
+      padding: 10px;
+      font-size: 14px;
+      line-height: 2;
+    }
+
+    .section-title {
+      background: #000;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+      padding: 8px;
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    td {
+      border: 1px solid #000;
+      padding: 8px;
+      vertical-align: top;
+      height: 50px;
+      font-size: 14px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="email"],
+    input[type="number"] {
+      width: 100%;
+      border: none;
+      outline: none;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+/* make checkbox inputs easier to see/press */
+.checkbox-group input[type="checkbox"] {
+  transform: scale(1.3);
+  transform-origin: left center;
+  margin-right: 6px;
+}
+
+    .checkbox-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 5px;
+      flex-wrap: wrap;
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .signature-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 30px;
+    }
+
+    .signature-line {
+      border-top: 1px solid #000;
+      padding-top: 8px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .dealership-box {
+      border: 1px solid #000;
+      margin-top: 30px;
+      padding: 10px;
+    }
+
+    .dealership-box h3 {
+      margin-top: 0;
+      font-size: 16px;
+    }
+
+    .dealership-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 2fr;
+      gap: 20px;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+
+      .download-bar {
+        display: none !important;
+      }
+
+
+      .container {
+        width: 100%;
+        border: none;
+      }
+    }
+</style>
+
+<!-- html2canvas + jsPDF for downloads -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+</head>
+<body>
+  <div class="container" id="receiptRoot">
+
+    <div class="download-bar" style="margin-bottom:16px; display:flex; gap:12px; justify-content:flex-end;">
+      <button type="button" id="downloadPngBtn">Download as PNG</button>
+      <button type="button" id="downloadPdfBtn">Download as PDF</button>
+    </div>
+
+    <div class="top-header">
+      <div class="logo-box">
+        <h1>Jbigs AUTO</h1>
+        <p>Auto Sales & Financing</p>
+      </div>
+
+      <div class="title-box">
+        <h2>CREDIT APPLICATION</h2>
+        <p>PLEASE PRINT OR TYPE</p>
+      </div>
+
+      
+    </div>
+
+    <div class="section-title">APPLICANT INFORMATION</div>
+
+    <table>
+      <tr>
+        <td colspan="3">
+          Full Name (First, Middle, Last):
+          <input type="text">
+        </td>
+        <td>
+          Date of Birth:
+          <input type="date">
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="3">
+          Current Address:
+          <input type="text">
+        </td>
+        <td>
+          Time at Address:
+          <input type="text">
+          <div class="checkbox-group">
+            <label><input type="checkbox"> Own</label>
+            <label><input type="checkbox"> Rent</label>
+            <label><input type="checkbox"> Other</label>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          City:
+          <input type="text">
+        </td>
+        <td>
+          State:
+          <input type="text">
+        </td>
+        <td>
+          ZIP Code:
+          <input type="text">
+        </td>
+        <td>
+          Phone Number:
+          <input type="text">
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2">
+          Email Address:
+          <input type="email">
+        </td>
+        <td>
+          Driver's License / State ID #:
+          <input type="text">
+        </td>
+        <td>
+          Exp. Date:
+          <input type="date">
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2">
+          Social Security Number (SSN) or ITIN:
+          <input type="text">
+        </td>
+        <td colspan="2">
+          Marital Status:
+          <div class="checkbox-group">
+            <label><input type="checkbox"> Single</label>
+            <label><input type="checkbox"> Married</label>
+            <label><input type="checkbox"> Separated</label>
+            <label><input type="checkbox"> Divorced</label>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <div class="section-title">EMPLOYMENT & INCOME INFORMATION</div>
+
+    <table>
+      <tr>
+        <td colspan="3">
+          Employer Name:
+          <input type="text">
+        </td>
+        <td>
+          Phone Number:
+          <input type="text">
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="3">
+          Employer Address:
+          <input type="text">
+        </td>
+        <td>
+          Time Employed:
+          <input type="text">
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="3">
+          Position / Occupation:
+          <input type="text">
+        </td>
+        <td>
+          Gross Monthly Income:
+          <input type="text">
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="3">
+          Other Sources of Income:
+          <input type="text">
+        </td>
+        <td>
+          Other Monthly Income:
+          <input type="text">
+        </td>
+      </tr>
+    </table>
+
+    <div class="section-title">RESIDENCES (PREVIOUS 2 YEARS)</div>
+
+    <table>
+      <tr>
+        <td colspan="3">
+          Current Address:
+          <input type="text">
+        </td>
+        <td>
+          From:
+          <input type="date">
+          To:
+          <input type="date">
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="3">
+          Previous Address:
+          <input type="text">
+        </td>
+        <td>
+          From:
+          <input type="date">
+          To:
+          <input type="date">
+        </td>
+      </tr>
+    </table>
+
+    <div class="section-title">VEHICLE & LOAN INFORMATION</div>
+
+    <table>
+      <tr>
+        <td>
+          Vehicle Price:
+          <input type="text">
+        </td>
+        <td>
+          Down Payment:
+          <input type="text">
+        </td>
+      
+        <td>
+          Loan Amount Requested:
+          <input type="text">
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="4">
+          Loan Term Requested:
+          <div class="checkbox-group">
+            <label><input type="checkbox"> 8 Months</label>
+            <label><input type="checkbox"> 12 Months</label>
+            <label><input type="checkbox"> 18 Months</label>
+            <label><input type="checkbox"> 32 Months</label>
+            <label><input type="checkbox"> Other</label>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <div class="section-title">REFERENCES</div>
+
+    <table>
+      <tr>
+        <td>
+          Name:
+          <input type="text">
+          Address:
+          <input type="text">
+        </td>
+
+        <td>
+          Phone Number:
+          <input type="text">
+        </td>
+
+        <td>
+          Relationship:
+          <input type="text">
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          Name:
+          <input type="text">
+          Address:
+          <input type="text">
+        </td>
+
+        <td>
+          Phone Number:
+          <input type="text">
+        </td>
+
+        <td>
+          Relationship:
+          <input type="text">
+        </td>
+      </tr>
+    </table>
+
+    <div class="footer-note">
+      I certify that the information provided in this application is true, correct, and complete to the best of my knowledge. I authorize ABC Motors and its financing partners to verify the information provided and to obtain my credit report.
+    </div>
+
+    <div class="signature-section">
+      <div class="signature-line">Applicant Signature</div>
+      <div class="signature-line">Date</div>
+    </div>
+
+    <div class="dealership-box">
+      <h3>FOR DEALERSHIP USE ONLY</h3>
+
+      <div class="dealership-grid">
+        <div>
+          Application Received By:
+          <input type="text">
+        </div>
+
+        <div>
+          Date:
+          <input type="date">
+        </div>
+
+        <div>
+          Notes:
+          <input type="text">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Collect values for inputs/checkboxes/radios so the captured receipt matches what user typed.
+    // Then use html2canvas to create PNG, and jsPDF to create a PDF.
+    (function () {
+      const receiptRoot = document.getElementById('receiptRoot');
+      const downloadPngBtn = document.getElementById('downloadPngBtn');
+      const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+
+      if (!receiptRoot || !downloadPngBtn || !downloadPdfBtn) return;
+
+      function getReceiptClone() {
+        // Clone the DOM and replace inputs/checkboxes with plain text so they render in canvas/PDF.
+        const clone = receiptRoot.cloneNode(true);
+
+        // Remove download buttons from clone (since we only want the receipt itself)
+        const cloneBar = clone.querySelector('.download-bar');
+        if (cloneBar) cloneBar.remove();
+
+        // Replace inputs with their values
+        const inputEls = clone.querySelectorAll('input');
+        inputEls.forEach((inp) => {
+          const type = (inp.getAttribute('type') || '').toLowerCase();
+          const wrapper = document.createElement('span');
+          wrapper.style.display = 'inline-block';
+          wrapper.style.minHeight = '16px';
+
+          if (type === 'checkbox') {
+            const checked = !!inp.checked;
+            // render like a checked/unchecked mark
+            wrapper.textContent = checked ? '☑' : '☐';
+            // Also keep the label text if present (we can't reliably get it after clone,
+            // so the simplest is to keep the preceding text nodes already inside the cell)
+          } else {
+            wrapper.textContent = inp.value ? String(inp.value) : '____________________';
+          }
+
+          inp.replaceWith(wrapper);
+        });
+
+        return clone;
+      }
+
+      async function downloadPNG() {
+        const clone = getReceiptClone();
+
+        // Render the clone off-screen
+        clone.style.position = 'fixed';
+        clone.style.left = '-20000px';
+        clone.style.top = '0';
+        clone.style.width = '1000px';
+        clone.style.background = '#fff';
+
+        document.body.appendChild(clone);
+
+        try {
+          const canvas = await html2canvas(clone, {
+            backgroundColor: '#ffffff',
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            width: clone.scrollWidth,
+            height: clone.scrollHeight
+          });
+
+          const dataUrl = canvas.toDataURL('image/png');
+          const a = document.createElement('a');
+          a.href = dataUrl;
+          a.download = 'credit-application-receipt.png';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        } finally {
+          clone.remove();
+        }
+      }
+
+      async function downloadPDF() {
+        const clone = getReceiptClone();
+
+        clone.style.position = 'fixed';
+        clone.style.left = '-20000px';
+        clone.style.top = '0';
+        clone.style.width = '1000px';
+        clone.style.background = '#fff';
+
+        document.body.appendChild(clone);
+
+        try {
+          const canvas = await html2canvas(clone, {
+            backgroundColor: '#ffffff',
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            width: clone.scrollWidth,
+            height: clone.scrollHeight
+          });
+
+          const imgData = canvas.toDataURL('image/png');
+
+          // Create a PDF that fits the image to page width.
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF({ orientation: 'p', unit: 'pt', format: 'letter' });
+
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const pageHeight = pdf.internal.pageSize.getHeight();
+
+          // Convert canvas size to PDF ratio
+          const imgProps = pdf.getImageProperties(imgData);
+          const imgWidth = pageWidth;
+          const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+
+          let heightLeft = imgHeight;
+          let position = 0;
+
+          // If the content is taller than a page, split across multiple pages.
+          // We place the *same* image with a vertical offset so each new PDF page shows the next slice.
+          // This avoids text overlap/breaking caused by re-rendering.
+          let remainingHeight = imgHeight;
+          let yOffset = 0;
+
+          // We add the image starting at y=0, then on subsequent pages we shift it upward.
+          // Add pages until we've covered the entire rendered image height.
+          while (remainingHeight > 0) {
+            pdf.addImage(imgData, 'PNG', 0, -yOffset, imgWidth, imgHeight);
+            remainingHeight -= pageHeight;
+            yOffset += pageHeight;
+
+            if (remainingHeight > 0) pdf.addPage();
+          }
+
+          pdf.save('credit-application-receipt.pdf');
+        } finally {
+          clone.remove();
+        }
+      }
+
+      downloadPngBtn.addEventListener('click', downloadPNG);
+      downloadPdfBtn.addEventListener('click', downloadPDF);
+    })();
+  </script>
+</body>
+</html>
